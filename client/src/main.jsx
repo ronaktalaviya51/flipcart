@@ -7,7 +7,7 @@ import { AuthProvider } from "./context/AuthContext";
 import axios from "axios";
 
 // 2. Configure Global Settings
-Axios.defaults.baseURL =
+axios.defaults.baseURL =
   import.meta.env.VITE_API_URL || "http://localhost:5000";
 axios.defaults.withCredentials = true; // Required if you use cookies/sessions
 
