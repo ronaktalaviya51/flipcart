@@ -14,7 +14,7 @@ import "react-quill/dist/quill.snow.css";
 
 // Configure axios base (assuming Vite proxy or CORS)
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://flipcart-backend-jfmj.onrender.com/api",
 });
 
 const Products = () => {
