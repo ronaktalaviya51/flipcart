@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `tbl_audit_logs` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `record_id` int(11) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
   `action` varchar(50) DEFAULT NULL,
@@ -289,7 +289,7 @@ INSERT INTO `tbl_audit_logs` (`id`, `record_id`, `user_id`, `action`, `operation
 --
 
 CREATE TABLE `tbl_product` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(300) DEFAULT NULL,
   `color` varchar(20) DEFAULT NULL,
   `size` varchar(20) DEFAULT NULL,
@@ -344,7 +344,7 @@ INSERT INTO `tbl_product` (`id`, `name`, `color`, `size`, `storage`, `selling_pr
 --
 
 CREATE TABLE `tbl_product_verient` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `product_id` int(11) DEFAULT NULL,
   `name` varchar(300) DEFAULT NULL,
   `color` varchar(20) DEFAULT NULL,
@@ -399,7 +399,7 @@ INSERT INTO `tbl_product_verient` (`id`, `product_id`, `name`, `color`, `size`, 
 --
 
 CREATE TABLE `tbl_roles` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `role` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -417,7 +417,7 @@ INSERT INTO `tbl_roles` (`id`, `role`) VALUES
 --
 
 CREATE TABLE `tbl_settings` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `company_name` varchar(40) DEFAULT NULL,
   `company_email` varchar(25) DEFAULT NULL,
   `admin_email` varchar(25) DEFAULT NULL,
@@ -447,7 +447,7 @@ INSERT INTO `tbl_settings` (`id`, `company_name`, `company_email`, `admin_email`
 --
 
 CREATE TABLE `tbl_users` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(100) DEFAULT NULL,
   `username` varchar(50) DEFAULT NULL,
   `password` varchar(50) DEFAULT NULL,
@@ -475,79 +475,79 @@ INSERT INTO `tbl_users` (`id`, `name`, `username`, `password`, `role_id`, `last_
 --
 -- Indexes for table `tbl_audit_logs`
 --
-ALTER TABLE `tbl_audit_logs`
-  ADD PRIMARY KEY (`id`);
+-- ALTER TABLE `tbl_audit_logs`
+--   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tbl_product`
---
-ALTER TABLE `tbl_product`
-  ADD PRIMARY KEY (`id`);
+-- --
+-- -- Indexes for table `tbl_product`
+-- --
+-- ALTER TABLE `tbl_product`
+--   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tbl_product_verient`
---
-ALTER TABLE `tbl_product_verient`
-  ADD PRIMARY KEY (`id`);
+-- --
+-- -- Indexes for table `tbl_product_verient`
+-- --
+-- ALTER TABLE `tbl_product_verient`
+--   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tbl_roles`
---
-ALTER TABLE `tbl_roles`
-  ADD PRIMARY KEY (`id`);
+-- --
+-- -- Indexes for table `tbl_roles`
+-- --
+-- ALTER TABLE `tbl_roles`
+--   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tbl_settings`
---
-ALTER TABLE `tbl_settings`
-  ADD PRIMARY KEY (`id`);
+-- --
+-- -- Indexes for table `tbl_settings`
+-- --
+-- ALTER TABLE `tbl_settings`
+--   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `tbl_users`
---
-ALTER TABLE `tbl_users`
-  ADD PRIMARY KEY (`id`);
+-- --
+-- -- Indexes for table `tbl_users`
+-- --
+-- ALTER TABLE `tbl_users`
+--   ADD PRIMARY KEY (`id`);
 
---
--- AUTO_INCREMENT for dumped tables
---
+-- --
+-- -- AUTO_INCREMENT for dumped tables
+-- --
 
---
--- AUTO_INCREMENT for table `tbl_audit_logs`
---
-ALTER TABLE `tbl_audit_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=324;
+-- --
+-- -- AUTO_INCREMENT for table `tbl_audit_logs`
+-- --
+-- ALTER TABLE `tbl_audit_logs`
+--   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=324;
 
---
--- AUTO_INCREMENT for table `tbl_product`
---
-ALTER TABLE `tbl_product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+-- --
+-- -- AUTO_INCREMENT for table `tbl_product`
+-- --
+-- ALTER TABLE `tbl_product`
+--   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
---
--- AUTO_INCREMENT for table `tbl_product_verient`
---
-ALTER TABLE `tbl_product_verient`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+-- --
+-- -- AUTO_INCREMENT for table `tbl_product_verient`
+-- --
+-- ALTER TABLE `tbl_product_verient`
+--   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
---
--- AUTO_INCREMENT for table `tbl_roles`
---
-ALTER TABLE `tbl_roles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+-- --
+-- -- AUTO_INCREMENT for table `tbl_roles`
+-- --
+-- ALTER TABLE `tbl_roles`
+--   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
---
--- AUTO_INCREMENT for table `tbl_settings`
---
-ALTER TABLE `tbl_settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+-- --
+-- -- AUTO_INCREMENT for table `tbl_settings`
+-- --
+-- ALTER TABLE `tbl_settings`
+--   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
---
--- AUTO_INCREMENT for table `tbl_users`
---
-ALTER TABLE `tbl_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-COMMIT;
+-- --
+-- -- AUTO_INCREMENT for table `tbl_users`
+-- --
+-- ALTER TABLE `tbl_users`
+--   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+-- COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
