@@ -5,12 +5,12 @@ import axios from "axios";
 const Payment = () => {
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
-  const [selectedMethod, setSelectedMethod] = useState("phonepe");
+  const [selectedMethod, setSelectedMethod] = useState("");
   const [settings, setSettings] = useState({
-    show_gpay: true,
-    show_phonepe: true,
-    show_paytm: true,
-    upi: "fsv.470000099388045@icici",
+    show_gpay: false,
+    show_phonepe: false,
+    show_paytm: false,
+    upi: "",
   });
 
   useEffect(() => {
@@ -22,18 +22,17 @@ const Payment = () => {
     // Fetch settings from API
     const fetchSettings = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5000/api/products/settings",
-        );
+        const response = await axios.get("/api/products/settings");
         if (response.data.success) {
           setSettings(response.data.data);
           // Set initial selected method based on availability
           const data = response.data.data;
-          if (data.show_phonepe) {
+          console.log("Settings data:", data);
+          if (data.show_phonepe == 1) {
             setSelectedMethod("phonepe");
-          } else if (data.show_gpay) {
+          } else if (data.show_gpay == 1) {
             setSelectedMethod("gpay");
-          } else if (data.show_paytm) {
+          } else if (data.show_paytm == 1) {
             setSelectedMethod("paytm");
           }
         }
@@ -161,7 +160,7 @@ const Payment = () => {
 
           <div className="p-2 mb-0.5 shadow-[0px_2px_5px_rgba(0,0,0,0.1)] m-2 bg-white rounded">
             {/* PhonePe */}
-            {settings.show_phonepe && (
+            {settings.show_phonepe == 1 && (
               <div
                 className={`flex items-center justify-between p-3 mb-2 cursor-pointer ${
                   selectedMethod === "phonepe" ? "active" : ""
@@ -196,7 +195,7 @@ const Payment = () => {
             )}
 
             {/* GPay */}
-            {settings.show_gpay && (
+            {settings.show_gpay == 1 && (
               <div
                 className={`flex items-center justify-between p-3 mb-2 cursor-pointer ${
                   selectedMethod === "gpay" ? "active" : ""
@@ -233,7 +232,7 @@ const Payment = () => {
             )}
 
             {/* Paytm */}
-            {settings.show_paytm && (
+            {settings.show_paytm == 1 && (
               <div
                 className={`flex items-center justify-between p-3 border-t border-gray-200 cursor-pointer ${
                   selectedMethod === "paytm" ? "active" : ""

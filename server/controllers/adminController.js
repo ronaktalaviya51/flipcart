@@ -3,7 +3,9 @@ const logAction = require("../utils/logger");
 
 const getSettings = async (req, res) => {
   try {
-    const [settings] = await db.query("SELECT * FROM tbl_setting WHERE id = 1");
+    const [settings] = await db.query(
+      "SELECT * FROM tbl_settings WHERE id = 1",
+    );
     if (settings.length > 0) {
       const data = settings[0];
       // Convert tinyint to boolean for frontend convenience if needed
@@ -42,8 +44,8 @@ const updateSettings = async (req, res) => {
     } = req.body;
 
     const query = `
-        UPDATE tbl_setting SET 
-        cmp_name = ?, cmp_email = ?, admin_email = ?, admin_email_password = ?, 
+        UPDATE tbl_settings SET 
+        company_name = ?, company_email = ?, admin_email = ?, admin_email_password = ?, 
         contact1 = ?, contact2 = ?, address = ?, show_gpay = ?, show_phonepe = ?, 
         show_paytm = ?, pay_type = ?, payment_script = ?, allowed_ip = ?, upi = ?, pixel = ?
         WHERE id = 1

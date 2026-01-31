@@ -32,7 +32,7 @@ const Settings = () => {
   const fetchSettings = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("/settings");
+      const res = await axios.get("/api/settings");
       // Mapping matching get_data from manage_setting.js
       if (res.data.success) {
         const d = res.data.data;
@@ -246,32 +246,29 @@ const Settings = () => {
                   Show PayTM
                 </label>
               </div>
+
+              <div className="flex items-center space-x-3">
+                <div className="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                  <input
+                    type="checkbox"
+                    name="pay_type"
+                    id="pay_type"
+                    className="peer absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer border-gray-300 checked:right-0 checked:border-[#727cf5]"
+                    checked={formData.pay_type}
+                    onChange={handleChange}
+                  />
+                  <label
+                    htmlFor="pay_type"
+                    className="block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer peer-checked:bg-[#727cf5]"
+                  ></label>
+                </div>
+                <label htmlFor="pay_type" className="font-medium text-gray-700">
+                  Use Common Payment System
+                </label>
+              </div>
             </div>
 
-            {/* Use Common Payment System (Legacy d-none, but referenced in js?) 
-               Wait, looking at manage_setting.php line 70, the WHOLE row for pay_type has 'd-none'.
-               AND pay_type_2 (Payment Script) has 'd-none'.
-               AND pay_type_1 (UPI) is visible.
-               
-               Let's re-read the legacy file carefully.
-               Line 70: <div class="row d-none"> ... id="pay_type" ... </div>
-               Line 77: <div class="row pay_type_2 d-none"> ... id="payment_script" ... </div>
-               Line 94: <div class="row pay_type_1"> ... id="upi" ... </div>
-               
-               So in the default legacy state:
-               - The SWITCH to change payment type is HIDDEN.
-               - The PAYMENT SCRIPT input is HIDDEN.
-               - The UPI input is VISIBLE.
-               
-               This implies the system is hardcoded to UPI mode in the UI, unless someone removes d-none manually.
-               However, the JS `manage_payment_div` TOGGLES classes based on the checkbox state.
-               So if the DB has `pay_type = 1` (true), the JS acts.
-               But if the checkbox itself is hidden, the user can't toggle it.
-               
-               I will assume the user wants the "Active" parts of legacy.
-               If strictly following legacy HTML: 
-               - Only Show GPay, Password, UPI, Pixel are visible.
-            */}
+            {/* Use Common Payment System (Legacy d-none, but referenced in js?)  */}
 
             {/* Rendering UPI Field (pay_type_1) - Visible if pay_type is false (UPI mode) */}
             {!formData.pay_type && (

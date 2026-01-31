@@ -7,7 +7,7 @@ const logAction = require("../utils/logger");
 const getPublicSettings = async (req, res) => {
   try {
     const [settings] = await db.query(
-      "SELECT show_gpay, show_phonepe, show_paytm, pay_type, payment_script, upi, pixel FROM tbl_setting WHERE id = 1",
+      "SELECT show_gpay, show_phonepe, show_paytm, pay_type, payment_script, upi, pixel FROM tbl_settings WHERE id = 1",
     );
     if (settings.length > 0) {
       const data = settings[0];
