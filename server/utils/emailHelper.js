@@ -1,65 +1,45 @@
 const nodemailer = require("nodemailer");
-const db = require("../config/db");
+const fs = require("fs");
+const path = require("path");
+
+const SETTINGS_FILE = path.join(__dirname, "../data/settings.json");
 
 const sendEmail = async (to, subject, html) => {
   try {
-    // Fetch SMTP settings from the database
-    const [settings] = await db.query("SELECT * FROM tbl_settings LIMIT 1");
-    if (settings.length === 0) {
-      throw new Error("SMTP settings not found in database.");
+    let settings = {};
+    if (fs.existsSync(SETTINGS_FILE)) {
+      settings = JSON.parse(fs.readFileSync(SETTINGS_FILE, "utf8"));
     }
 
-    const { admin_email, admin_email_password, company_name } = settings[0];
+    const { admin_email, admin_email_password, company_name } = settings;
 
-    // Create a transporter
+    if (!admin_email || !admin_email_password) {
+      console.warn("SMTP settings missing. Skipping email send.");
+      return { success: false, message: "SMTP settings missing" };
+    }
+
     const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com", // You might want to make this dynamic if stored in DB, but PHP code had it hardcoded as smtp.gmail.com
+      host: "smtp.gmail.com",
       port: 587,
-      secure: false, // true for 465, false for other ports
+      secure: false,
       auth: {
         user: admin_email,
         pass: admin_email_password,
       },
     });
 
-    // Validate recipients
-    const recipientProvided = !!(
-      (Array.isArray(to) && to.length > 0) ||
-      (typeof to === "string" && to.trim() !== "")
-    );
-
-    if (!recipientProvided) {
-      console.warn(
-        "No recipient provided to sendEmail(); falling back to admin_email",
-      );
-      to = admin_email; // fallback to admin email from settings
-    }
-
     const mailOptions = {
-      from: `"${company_name}" <${admin_email}>`,
-      to: to,
-      subject: subject || `${company_name} Notification`,
+      from: `"${company_name || "Admin"}" <${admin_email}>`,
+      to: to || admin_email,
+      subject: subject || "Notification",
       html: html || "",
     };
 
-    console.debug("Sending email with options:", {
-      from: mailOptions.from,
-      to: mailOptions.to,
-      subject: mailOptions.subject,
-    });
-
-    // Send mail
     const info = await transporter.sendMail(mailOptions);
-
-    console.log("Message sent: %s", info.messageId);
-    return {
-      success: true,
-      message: "Message has been sent successfully",
-      messageId: info.messageId,
-    };
+    return { success: true, info };
   } catch (error) {
-    console.error("Error sending email:", error);
-    return { success: false, message: "Mailer Error: " + error.message };
+    console.error("Email error:", error);
+    return { success: false, error };
   }
 };
 

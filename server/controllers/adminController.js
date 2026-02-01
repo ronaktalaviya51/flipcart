@@ -1,19 +1,33 @@
-const db = require("../config/db");
-const logAction = require("../utils/logger");
+const fs = require("fs");
+const path = require("path");
+
+const SETTINGS_FILE = path.join(__dirname, "../data/settings.json");
+
+const readJSON = (filePath) => {
+  try {
+    if (!fs.existsSync(filePath)) return null;
+    return JSON.parse(fs.readFileSync(filePath, "utf8"));
+  } catch (err) {
+    console.error(`Error reading ${filePath}:`, err);
+    return null;
+  }
+};
+
+const writeJSON = (filePath, data) => {
+  try {
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf8");
+    return true;
+  } catch (err) {
+    console.error(`Error writing to ${filePath}:`, err);
+    return false;
+  }
+};
 
 const getSettings = async (req, res) => {
   try {
-    const [settings] = await db.query(
-      "SELECT * FROM tbl_settings WHERE id = 1",
-    );
-    if (settings.length > 0) {
-      const data = settings[0];
-      // Convert tinyint to boolean for frontend convenience if needed
-      data.show_gpay = Boolean(data.show_gpay);
-      data.show_phonepe = Boolean(data.show_phonepe);
-      data.show_paytm = Boolean(data.show_paytm);
-      data.pay_type = Boolean(data.pay_type);
-      res.json({ success: true, data: data });
+    const settings = readJSON(SETTINGS_FILE);
+    if (settings) {
+      res.json({ success: true, data: settings });
     } else {
       res.json({ success: false, message: "Settings not found" });
     }
@@ -25,52 +39,9 @@ const getSettings = async (req, res) => {
 
 const updateSettings = async (req, res) => {
   try {
-    const {
-      cmp_name,
-      cmp_email,
-      admin_email,
-      admin_email_password,
-      contact1,
-      contact2,
-      address,
-      show_gpay,
-      show_phonepe,
-      show_paytm,
-      pay_type,
-      payment_script,
-      allowed_ip,
-      upi,
-      pixel,
-    } = req.body;
-
-    const query = `
-        UPDATE tbl_settings SET 
-        company_name = ?, company_email = ?, admin_email = ?, admin_email_password = ?, 
-        contact1 = ?, contact2 = ?, address = ?, show_gpay = ?, show_phonepe = ?, 
-        show_paytm = ?, pay_type = ?, payment_script = ?, allowed_ip = ?, upi = ?, pixel = ?
-        WHERE id = 1
-    `;
-
-    const values = [
-      cmp_name,
-      cmp_email,
-      admin_email,
-      admin_email_password,
-      contact1,
-      contact2,
-      address,
-      show_gpay ? 1 : 0,
-      show_phonepe ? 1 : 0,
-      show_paytm ? 1 : 0,
-      pay_type ? 1 : 0,
-      payment_script,
-      allowed_ip,
-      upi,
-      pixel,
-    ];
-
-    await db.query(query, values);
-    logAction(req, "Update", "update_settings");
+    const settings = readJSON(SETTINGS_FILE) || {};
+    const updated = { ...settings, ...req.body };
+    writeJSON(SETTINGS_FILE, updated);
     res.json({ success: true, message: "Settings updated successfully" });
   } catch (error) {
     console.error(error);
