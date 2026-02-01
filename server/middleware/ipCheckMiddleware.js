@@ -1,56 +1,37 @@
-const db = require("../config/db");
+const fs = require("fs");
+const path = require("path");
+
+const SETTINGS_FILE = path.join(__dirname, "../data/settings.json");
 
 const ipCheckMiddleware = async (req, res, next) => {
   try {
-    // 1. Fetch allowed_ip from settings
-    const [settings] = await db.query(
-      "SELECT allowed_ip FROM tbl_settings WHERE id = 1",
-    );
-    if (!settings || settings.length === 0) {
-      return next(); // No settings, proceed (or should we fail open? Legacy implies if setting exists check it)
+    let allowedIpsString = "";
+    if (fs.existsSync(SETTINGS_FILE)) {
+      const settings = JSON.parse(fs.readFileSync(SETTINGS_FILE, "utf8"));
+      allowedIpsString = settings.allowed_ip || "";
     }
 
-    const allowedIpsString = settings[0].allowed_ip;
-
-    // 2. If empty, allow all
     if (!allowedIpsString || allowedIpsString.trim() === "") {
       return next();
     }
 
-    // 3. Get client IP
     let clientIp =
       req.headers["x-forwarded-for"] || req.socket.remoteAddress || "";
+    if (clientIp.startsWith("::ffff:")) clientIp = clientIp.substr(7);
+    if (clientIp === "::1") clientIp = "127.0.0.1";
 
-    // Normalize IP (handle IPv6 mapping to IPv4 like ::ffff:127.0.0.1)
-    if (clientIp.startsWith("::ffff:")) {
-      clientIp = clientIp.substr(7);
-    }
-    // Handle localhost IPv6
-    if (clientIp === "::1") {
-      clientIp = "127.0.0.1";
-    }
-
-    // 4. Check if client IP is in the allowed list
-    const allowedList = allowedIpsString
-      .split(",")
-      .map((ip) => ip.trim())
-      .filter((ip) => ip !== "");
-
-    // If list is not empty and Client IP is not in it, deny
-    if (allowedList.length > 0 && !allowedList.includes(clientIp)) {
-      console.warn(`Access Denied for IP: ${clientIp}`);
+    const allowedIps = allowedIpsString.split(",").map((ip) => ip.trim());
+    if (allowedIps.includes(clientIp)) {
+      return next();
+    } else {
+      console.warn(`Blocked access from unauthorized IP: ${clientIp}`);
       return res.status(403).json({
         success: false,
-        message: "Access Denied: Your IP is not allowed.",
+        message: "Forbidden: Access denied from your IP.",
       });
     }
-
-    next();
   } catch (error) {
     console.error("IP Check Error:", error);
-    // In case of DB error, maybe allow to avoid lockout? Or deny safe?
-    // Failing safe usually means deny, but failing open keeps site up.
-    // For now, proceed to avoid breaking admin due to unrelated DB glitch.
     next();
   }
 };

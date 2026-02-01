@@ -26,13 +26,11 @@ const Home = () => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        // Match legacy manage_index.js: start index based on page
         const length = 10;
         const start = (page - 1) * length;
         const res = await axios.get(
           `/api/products?start=${start}&length=${length}`,
         );
-
         if (res.data.success && res.data.data.length > 0) {
           setProducts((prev) => {
             // Avoid duplicates if strict mode causes double fetch
