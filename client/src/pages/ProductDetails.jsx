@@ -47,6 +47,7 @@ const ProductDetails = () => {
         const response = await axios.get(`/api/products/${id}`);
         if (response.data && response.data.success) {
           setProduct(response.data.data);
+          console.log("Fetched product:", response.data.data);
         } else {
           toast.error("Failed to load product");
         }
@@ -168,7 +169,7 @@ const ProductDetails = () => {
         Loading...
       </div>
     );
-  if (!product)
+  if (!product || !variant)
     return (
       <div className="flex justify-center items-center h-screen">
         Product Not Found
@@ -277,7 +278,7 @@ const ProductDetails = () => {
         <div className="bg-white mb-1 mt-1 border-t border-gray-100">
           <div className="px-4 py-3">
             <h1 className="text-sm text-gray-900 leading-normal mb-2 text-[#212121]">
-              {variant.name}
+              {variant?.name || product?.name}
             </h1>
 
             {/* Ratings */}

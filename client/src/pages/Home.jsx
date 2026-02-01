@@ -26,7 +26,6 @@ const Home = () => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        // Match legacy manage_index.js: start index based on page
         const length = 10;
         const start = (page - 1) * length;
         const res = await axios.get(
