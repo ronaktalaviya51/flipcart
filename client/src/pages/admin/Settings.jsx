@@ -101,7 +101,7 @@ const Settings = () => {
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
         <div className="p-8">
-          <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl">
+          <form noValidate onSubmit={handleSubmit} className="space-y-6 max-w-4xl">
             {/* 
                Legacy Project Notes:
                Many fields were hidden with 'd-none' in manage_setting.php.
