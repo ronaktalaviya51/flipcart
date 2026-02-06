@@ -74,6 +74,10 @@ const Settings = () => {
     e.preventDefault();
     try {
       const res = await axios.post("/api/settings", formData);
+      if (!formData.pay_type && !formData.upi) {
+        toast.error("UPI ID is required");
+        return;
+      }
       if (res.data.success) {
         toast.success(res.data.message);
       } else {
