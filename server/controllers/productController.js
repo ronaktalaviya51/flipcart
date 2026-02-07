@@ -83,6 +83,10 @@ const getProducts = async (req, res) => {
         md5_id: md5(p.id),
       }));
 
+    console.log(
+      `Fetched products with search="${search}", start=${start}, length=${length}. Total after filter: ${totalCount}`,
+    );
+
     res.json({
       success: 1,
       status: 1,
