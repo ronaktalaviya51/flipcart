@@ -11,7 +11,14 @@ const md5 = (str) => crypto.createHash("md5").update(String(str)).digest("hex");
 // Helper to read and write JSON data
 const readJSON = (filePath) => {
   try {
-    if (!fs.existsSync(filePath)) return null;
+    if (!fs.existsSync(filePath)) {
+      // Initialize with empty array if it's the products file
+      if (filePath.endsWith("products.json")) {
+        fs.writeFileSync(filePath, "[]", "utf8");
+        return [];
+      }
+      return null;
+    }
     return JSON.parse(fs.readFileSync(filePath, "utf8"));
   } catch (err) {
     console.error(`Error reading ${filePath}:`, err);
