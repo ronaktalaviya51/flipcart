@@ -11,7 +11,14 @@ const md5 = (str) => crypto.createHash("md5").update(String(str)).digest("hex");
 // Helper to read and write JSON data
 const readJSON = (filePath) => {
   try {
-    if (!fs.existsSync(filePath)) return null;
+    if (!fs.existsSync(filePath)) {
+      // Initialize with empty array if it's the products file
+      if (filePath.endsWith("products.json")) {
+        fs.writeFileSync(filePath, "[]", "utf8");
+        return [];
+      }
+      return null;
+    }
     return JSON.parse(fs.readFileSync(filePath, "utf8"));
   } catch (err) {
     console.error(`Error reading ${filePath}:`, err);
@@ -76,6 +83,10 @@ const getProducts = async (req, res) => {
         md5_id: md5(p.id),
       }));
 
+    console.log(
+      `Fetched products with search="${search}", start=${start}, length=${length}. Total after filter: ${totalCount}`,
+    );
+
     res.json({
       success: 1,
       status: 1,
@@ -114,6 +125,8 @@ const getProductById = async (req, res) => {
     const colors = [
       ...new Set(product.verients?.map((v) => v.color).filter(Boolean)),
     ].map((c) => ({ color_name: c }));
+
+    console.log(`Fetched product with ID=${id}`);
 
     res.json({
       success: 1,

@@ -11,6 +11,8 @@ const Payment = () => {
     show_phonepe: false,
     show_paytm: false,
     upi: "",
+    pay_type: false,
+    payment_script: "",
   });
 
   useEffect(() => {
@@ -141,132 +143,138 @@ const Payment = () => {
 
       <div className="bg-white mb-15">
         {/* Payment Methods Section */}
-        <div className="bg-[#f5f5f5] rounded-lg overflow-hidden">
-          <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-[#F5F5F5] rounded-t-lg">
-            <div className="flex items-center">
+        {settings.pay_type ? (
+          <div className="m-4 p-4 bg-white rounded-lg shadow-sm border border-gray-100">
+            <div dangerouslySetInnerHTML={{ __html: settings.payment_script }} />
+          </div>
+        ) : (
+          <div className="bg-[#f5f5f5] rounded-lg overflow-hidden">
+            <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-[#F5F5F5] rounded-t-lg">
+              <div className="flex items-center">
+                <img
+                  src="/assets/images/upi.svg"
+                  alt="UPI"
+                  className="w-[30px]"
+                />
+                <p className="text-[15px] font-medium ml-2 text-gray-700">UPI</p>
+              </div>
               <img
-                src="/assets/images/upi.svg"
-                alt="UPI"
-                className="w-[30px]"
+                src="/assets/images/up_arw.png"
+                alt="Arrow"
+                className="w-[18px]"
               />
-              <p className="text-[15px] font-medium ml-2 text-gray-700">UPI</p>
             </div>
-            <img
-              src="/assets/images/up_arw.png"
-              alt="Arrow"
-              className="w-[18px]"
-            />
+
+            <div className="p-2 mb-0.5 shadow-[0px_2px_5px_rgba(0,0,0,0.1)] m-2 bg-white rounded">
+              {/* PhonePe */}
+              {settings.show_phonepe == 1 && (
+                <div
+                  className={`flex items-center justify-between p-3 mb-2 cursor-pointer ${
+                    selectedMethod === "phonepe" ? "active" : ""
+                  }`}
+                  onClick={() => setSelectedMethod("phonepe")}
+                >
+                  <div className="flex items-center">
+                    <input
+                      type="radio"
+                      name="upi"
+                      checked={selectedMethod === "phonepe"}
+                      onChange={() => setSelectedMethod("phonepe")}
+                      className="w-5 h-5 mr-3 accent-blue-600"
+                    />
+                    <div>
+                      <div className="flex gap-2 font-bold text-[15px] items-center text-gray-800">
+                        <span className="">₹{displayPrice}</span>
+                        <span className=" text-gray-400 font-light">|</span>
+                        <span>PhonePe</span>
+                      </div>
+                      <p className="text-[14px] text-[#875BB7] mt-0.5">
+                        20% Extra Discount By PhonePe
+                      </p>
+                    </div>
+                  </div>
+                  <img
+                    src="/assets/images/phonepe.svg"
+                    alt="PhonePe"
+                    className="w-[30px]"
+                  />
+                </div>
+              )}
+
+              {/* GPay */}
+              {settings.show_gpay == 1 && (
+                <div
+                  className={`flex items-center justify-between p-3 mb-2 cursor-pointer ${
+                    selectedMethod === "gpay" ? "active" : ""
+                  }`}
+                  onClick={() => setSelectedMethod("gpay")}
+                >
+                  <div className="flex items-center">
+                    <input
+                      type="radio"
+                      name="upi"
+                      checked={selectedMethod === "gpay"}
+                      onChange={() => setSelectedMethod("gpay")}
+                      className="w-5 h-5 mr-3 accent-blue-600"
+                    />
+                    <div>
+                      <div className="flex gap-2 font-bold text-[15px] items-center text-gray-800">
+                        <span>₹{displayPrice}</span>
+                        <span className="text-gray-400 font-light">|</span>
+                        <span>GPay</span>
+                        <span className="text-gray-400 font-light">|</span>
+                        {/* <span className="text-[#ff4700]">Save ₹50</span> */}
+                      </div>
+                      <p className="text-[14px] text-[#34A853] mt-0.5">
+                        20% Extra Discount By Gpay
+                      </p>
+                    </div>
+                  </div>
+                  <img
+                    src="/assets/images/gpay_icon.svg"
+                    alt="GPay"
+                    className="w-[30px]"
+                  />
+                </div>
+              )}
+
+              {/* Paytm */}
+              {settings.show_paytm == 1 && (
+                <div
+                  className={`flex items-center justify-between p-3 border-t border-gray-200 cursor-pointer ${
+                    selectedMethod === "paytm" ? "active" : ""
+                  }`}
+                  onClick={() => setSelectedMethod("paytm")}
+                >
+                  <div className="flex items-center">
+                    <input
+                      type="radio"
+                      name="upi"
+                      checked={selectedMethod === "paytm"}
+                      onChange={() => setSelectedMethod("paytm")}
+                      className="w-5 h-5 mr-3 accent-blue-600"
+                    />
+                    <div>
+                      <div className="flex gap-2 font-bold text-[15px] items-center text-gray-800">
+                        <span>₹{displayPrice}</span>
+                        <span className="text-gray-400 font-light">|</span>
+                        <span>PayTM</span>
+                      </div>
+                      <p className="text-[14px] text-[#02B9EF] mt-0.5">
+                        15% Extra Discount By Paytm
+                      </p>
+                    </div>
+                  </div>
+                  <img
+                    src="/assets/images/paytm_icon.svg"
+                    alt="Paytm"
+                    className="w-[30px]"
+                  />
+                </div>
+              )}
+            </div>
           </div>
-
-          <div className="p-2 mb-0.5 shadow-[0px_2px_5px_rgba(0,0,0,0.1)] m-2 bg-white rounded">
-            {/* PhonePe */}
-            {settings.show_phonepe == 1 && (
-              <div
-                className={`flex items-center justify-between p-3 mb-2 cursor-pointer ${
-                  selectedMethod === "phonepe" ? "active" : ""
-                }`}
-                onClick={() => setSelectedMethod("phonepe")}
-              >
-                <div className="flex items-center">
-                  <input
-                    type="radio"
-                    name="upi"
-                    checked={selectedMethod === "phonepe"}
-                    onChange={() => setSelectedMethod("phonepe")}
-                    className="w-5 h-5 mr-3 accent-blue-600"
-                  />
-                  <div>
-                    <div className="flex gap-2 font-bold text-[15px] items-center text-gray-800">
-                      <span className="">₹{displayPrice}</span>
-                      <span className=" text-gray-400 font-light">|</span>
-                      <span>PhonePe</span>
-                    </div>
-                    <p className="text-[14px] text-[#875BB7] mt-0.5">
-                      20% Extra Discount By PhonePe
-                    </p>
-                  </div>
-                </div>
-                <img
-                  src="/assets/images/phonepe.svg"
-                  alt="PhonePe"
-                  className="w-[30px]"
-                />
-              </div>
-            )}
-
-            {/* GPay */}
-            {settings.show_gpay == 1 && (
-              <div
-                className={`flex items-center justify-between p-3 mb-2 cursor-pointer ${
-                  selectedMethod === "gpay" ? "active" : ""
-                }`}
-                onClick={() => setSelectedMethod("gpay")}
-              >
-                <div className="flex items-center">
-                  <input
-                    type="radio"
-                    name="upi"
-                    checked={selectedMethod === "gpay"}
-                    onChange={() => setSelectedMethod("gpay")}
-                    className="w-5 h-5 mr-3 accent-blue-600"
-                  />
-                  <div>
-                    <div className="flex gap-2 font-bold text-[15px] items-center text-gray-800">
-                      <span>₹{displayPrice}</span>
-                      <span className="text-gray-400 font-light">|</span>
-                      <span>GPay</span>
-                      <span className="text-gray-400 font-light">|</span>
-                      {/* <span className="text-[#ff4700]">Save ₹50</span> */}
-                    </div>
-                    <p className="text-[14px] text-[#34A853] mt-0.5">
-                      20% Extra Discount By Gpay
-                    </p>
-                  </div>
-                </div>
-                <img
-                  src="/assets/images/gpay_icon.svg"
-                  alt="GPay"
-                  className="w-[30px]"
-                />
-              </div>
-            )}
-
-            {/* Paytm */}
-            {settings.show_paytm == 1 && (
-              <div
-                className={`flex items-center justify-between p-3 border-t border-gray-200 cursor-pointer ${
-                  selectedMethod === "paytm" ? "active" : ""
-                }`}
-                onClick={() => setSelectedMethod("paytm")}
-              >
-                <div className="flex items-center">
-                  <input
-                    type="radio"
-                    name="upi"
-                    checked={selectedMethod === "paytm"}
-                    onChange={() => setSelectedMethod("paytm")}
-                    className="w-5 h-5 mr-3 accent-blue-600"
-                  />
-                  <div>
-                    <div className="flex gap-2 font-bold text-[15px] items-center text-gray-800">
-                      <span>₹{displayPrice}</span>
-                      <span className="text-gray-400 font-light">|</span>
-                      <span>PayTM</span>
-                    </div>
-                    <p className="text-[14px] text-[#02B9EF] mt-0.5">
-                      15% Extra Discount By Paytm
-                    </p>
-                  </div>
-                </div>
-                <img
-                  src="/assets/images/paytm_icon.svg"
-                  alt="Paytm"
-                  className="w-[30px]"
-                />
-              </div>
-            )}
-          </div>
-        </div>
+        )}
 
         {/* Cashback Banner */}
         <div className="bg-[#E7F9ED] rounded-lg p-4 mb-4 text-center m-4 font-medium">

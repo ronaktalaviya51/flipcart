@@ -38,17 +38,17 @@ const Settings = () => {
         const d = res.data.data;
         setFormData({
           id: d.id,
-          cmp_name: d.company_name || "",
-          cmp_email: d.company_email || "",
+          cmp_name: d.cmp_name || d.company_name || "",
+          cmp_email: d.cmp_email || d.company_email || "",
           admin_email: d.admin_email || "",
           admin_email_password: d.admin_email_password || "",
           contact1: d.contact1 || "",
           contact2: d.contact2 || "",
           address: d.address || "",
-          show_gpay: d.show_gpay == 1 || d.show_gpay === true,
-          show_phonepe: d.show_phonepe == 1 || d.show_phonepe === true,
-          show_paytm: d.show_paytm == 1 || d.show_paytm === true,
-          pay_type: d.pay_type == 1 || d.pay_type === true,
+          show_gpay: !!d.show_gpay,
+          show_phonepe: !!d.show_phonepe,
+          show_paytm: !!d.show_paytm,
+          pay_type: !!d.pay_type,
           payment_script: d.payment_script || "",
           allowed_ip: d.allowed_ip || "",
           upi: d.upi || "",
@@ -72,12 +72,12 @@ const Settings = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.pay_type && !formData.upi) {
+      toast.error("UPI ID is required");
+      return;
+    }
     try {
       const res = await axios.post("/api/settings", formData);
-      if (!formData.pay_type && !formData.upi) {
-        toast.error("UPI ID is required");
-        return;
-      }
       if (res.data.success) {
         toast.success(res.data.message);
       } else {
@@ -101,7 +101,11 @@ const Settings = () => {
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
         <div className="p-8">
-          <form noValidate onSubmit={handleSubmit} className="space-y-6 max-w-4xl">
+          <form
+            noValidate
+            onSubmit={handleSubmit}
+            className="space-y-6 max-w-4xl"
+          >
             {/* 
                Legacy Project Notes:
                Many fields were hidden with 'd-none' in manage_setting.php.
