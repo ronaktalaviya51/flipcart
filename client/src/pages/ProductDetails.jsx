@@ -182,7 +182,7 @@ const ProductDetails = () => {
       <div className="bg-[#2874f0] text-white py-2 shadow-md">
         <div className="w-full">
           <div className="flex items-center flex-wrap">
-            <div className="flex-[0_0_8.333333%] max-w-[8.333333%] px-[15px]">
+            <div className="flex-[0_0_8.333333%] max-w-[8.333333%] pl-4 md:px-[15px]">
               <div className="menu-icon" id="back_btn">
                 <button
                   onClick={() => navigate(-1)}
@@ -208,7 +208,7 @@ const ProductDetails = () => {
               </div>
             </div>
             <div className="flex-[0_0_50%] max-w-[50%] px-[15px]"></div>
-            <div className="flex-[0_0_8.333333%] max-w-[8.333333%] px-[15px]">
+            <div className="flex-[0_0_8.333333%] max-w-[8.333333%] md:px-[15px]">
               <div className="menu-icon">
                 <img
                   src="/assets/images/theme/search.svg"
@@ -217,7 +217,7 @@ const ProductDetails = () => {
                 />
               </div>
             </div>
-            <div className="flex-[0_0_8.333333%] max-w-[8.333333%] px-[15px]">
+            <div className="flex-[0_0_8.333333%] max-w-[8.333333%] md:px-[15px]">
               <div className="menu-icon">
                 <img
                   src="/assets/images/shoppings.png"
