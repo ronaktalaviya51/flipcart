@@ -333,14 +333,14 @@ const Payment = () => {
           <img
             src="/assets/images/SecurePay.jpg"
             alt="Secure Pay"
-            className="w-full lg:h-100 max-w-sm mb-5 md:mb-25 lg:mb-0 lg:min-w-255"
+            className="w-full lg:h-100 max-w-sm mb-25 lg:mb-0 lg:min-w-255"
           />
         </div>
       </div>
 
       {/* Footer */}
       {/* Mobile Footer (Exact match to image) */}
-      <div className="w-full bg-white shadow-[0_-1px_5px_rgba(0,0,0,0.1)] p-4 px-6 flex md:hidden z-50 justify-between items-center border-t border-gray-100">
+      <div className="fixed bottom-0 left-0 right-0 w-full bg-white shadow-[0_-1px_5px_rgba(0,0,0,0.1)] p-4 px-6 flex md:hidden z-50 justify-between items-center border-t border-gray-100">
         <div className="flex items-center">
           <span className="text-[24px] font-medium text-[#212121]">
             ₹{sellingPrice}
